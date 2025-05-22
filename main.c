@@ -3,12 +3,12 @@
 
 int main(void)
 {
-    mBlock *block = (mBlock *) requestMemory(1024);
-    block->size = 1024 + sizeof(mBlock);
-    block->free = false;
+    mBlock *block = nMalloc(1024);
 
     printf("size of the mBlock struct: %lu\n", sizeof(mBlock));
     printf("size of new mBlock variable: %lu\n", block->size);
+
+    nFree(block);
 
     return 0;
 }
