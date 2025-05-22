@@ -2,7 +2,8 @@
 #include <unistd.h>
 #include "nMem.h"
 
-mBlock *mPool = NULL;
+mBlock *mPoolHead = NULL;
+mBlock *mPoolTail = NULL;
 
 void panic(char *message)
 {
@@ -30,13 +31,11 @@ void *nMalloc(size_t size)
     block->free = false;
     block->next = NULL;
 
-    if (!mPool)
-        mPool = block;
-    else {
-        mBlock *cur = mPool;
-        while (cur->next != NULL)
-            cur = cur->next;
-        cur->next = block;
+    if (!mPool) {
+        mPoolHead = mPoolTail = block;
+    } else {
+        mPoolTail->next = block;
+        mPoolTail = block;
     }
 
     return (void *) block;
