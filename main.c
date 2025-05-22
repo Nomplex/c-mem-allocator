@@ -1,25 +1,3 @@
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-
-// Memory block metadata
-typedef struct memBlock {
-    bool free;
-    size_t size;
-} mBlock;
-
-void *requestMemory(size_t size)
-{
-    void *ptr = sbrk(size);
-    if (!ptr) {
-        printf("No Pointer :(");
-        exit(EXIT_FAILURE);
-    }
-
-    return ptr;
-}
-
 int main(void)
 {
     size_t totalSize = 1024 + sizeof(mBlock);
