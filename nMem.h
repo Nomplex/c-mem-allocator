@@ -8,10 +8,12 @@
 typedef struct memBlock {
     bool free;
     size_t size;
+    struct memBlock *next;
 } mBlock;
 
 void *requestMemory(size_t size);
 void *nMalloc(size_t size);
 void nFree(void *ptr);
+void printMemoryPool(void);
 
 #endif

@@ -4,11 +4,13 @@
 int main(void)
 {
     mBlock *block = nMalloc(1024);
+    printMemoryPool();
 
-    printf("size of the mBlock struct: %lu\n", sizeof(mBlock));
-    printf("size of new mBlock variable: %lu\n", block->size);
+    mBlock *block2 = nMalloc(512);
+    printMemoryPool();
 
     nFree(block);
+    nFree(block2);
 
     return 0;
 }
