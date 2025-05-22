@@ -3,14 +3,17 @@
 
 int main(void)
 {
-    mBlock *block = nMalloc(1024);
-    printMemoryPool();
+    int *nInt = nMalloc(sizeof(int));
+    *nInt = 42;
+    printf("nInt: %d\n", *nInt);
 
-    mBlock *block2 = nMalloc(512);
-    printMemoryPool();
+    float *nFloat = nMalloc(sizeof(float));
+    *nFloat = 42.42;
+    printf("nFloat: %.2f\n", *nFloat);
 
-    nFree(block);
-    nFree(block2);
+    printMemoryPool();
+    nFree(nInt);
+    nFree(nFloat);
 
     return 0;
 }
