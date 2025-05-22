@@ -22,10 +22,13 @@ void *requestMemory(size_t size)
 
 void *nMalloc(size_t size)
 {
-    mBlock *block = (mBlock *) requestMemory(size);
-    if (!block)
-        panic("No block!");
+    mBlock *block = findFreeBlock(size);
+    if (block) {
+        block->free = false;
+        return (void *) (block + 1);
+    }
 
+    block = (mBlock *) requestMemory(size);
     block->size = size;
     block->free = false;
     block->next = NULL;
@@ -45,9 +48,17 @@ void nFree(void *ptr)
     if (!ptr) return;
 
     mBlock *block = (mBlock *) ptr - 1;
-
-    printf("Freeing block with size of: %lu\n", block->size);
     block->free = true;
+    printf("Freeing block with size of: %lu\n", block->size);
+}
+
+void *findFreeBlock(size_t size)
+{
+    for (mBlock *cur = mPoolHead; cur != NULL; cur = cur->next)
+        if (cur->free && size <= (cur->size - sizeof(mBlock)))
+            return cur;
+
+    return NULL;
 }
 
 void printMemoryPool(void)

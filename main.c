@@ -1,19 +1,22 @@
 #include <stdio.h>
 #include "nMem.h"
 
+struct testStruct {
+    int x;
+    int y;
+};
+
 int main(void)
 {
+
+    printf("size of testStruct: %lu\n", sizeof(struct testStruct));
+    struct testStruct *t = nMalloc(sizeof(struct testStruct));
+    printMemoryPool();
+    nFree(t);
+
     int *nInt = nMalloc(sizeof(int));
-    *nInt = 42;
-    printf("nInt: %d\n", *nInt);
-
-    float *nFloat = nMalloc(sizeof(float));
-    *nFloat = 42.42;
-    printf("nFloat: %.2f\n", *nFloat);
-
     printMemoryPool();
     nFree(nInt);
-    nFree(nFloat);
 
     return 0;
 }

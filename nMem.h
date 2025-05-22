@@ -14,6 +14,7 @@ typedef struct memBlock {
 void *requestMemory(size_t size);
 void *nMalloc(size_t size);
 void nFree(void *ptr);
+void *findFreeBlock(size_t size);
 void printMemoryPool(void);
 
 #endif
