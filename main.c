@@ -1,8 +1,10 @@
+#include <stdio.h>
+#include "nMem.h"
+
 int main(void)
 {
-    size_t totalSize = 1024 + sizeof(mBlock);
-    mBlock *block = (mBlock *) requestMemory(totalSize);
-    block->size = totalSize;
+    mBlock *block = (mBlock *) requestMemory(1024);
+    block->size = 1024 + sizeof(mBlock);
     block->free = false;
 
     printf("size of the mBlock struct: %lu\n", sizeof(mBlock));
