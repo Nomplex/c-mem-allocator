@@ -24,6 +24,8 @@ void *nMalloc(size_t size)
 {
     mBlock *block = findFreeBlock(size);
     if (block) {
+        if (canSplitBlock(block, size))
+            splitBlock(block, size);
         block->free = false;
         return (void *) (block + 1);
     }
@@ -59,6 +61,32 @@ void *findFreeBlock(size_t size)
             return cur;
 
     return NULL;
+}
+
+bool canSplitBlock(mBlock *block, size_t size)
+{
+    // I'm just going to use the size of an int as an arbitrary size
+    size_t minSize = sizeof(mBlock) + sizeof(int);
+    size_t reqSize = sizeof(mBlock) + size;
+
+    return (block->size >= reqSize + minSize);
+
+    // My old return that underflowed... :(
+    // return (block->size - reqSize >= minSize);
+}
+
+void splitBlock(mBlock *block, size_t size)
+{
+    size_t reqSize = sizeof(mBlock) + size;
+
+    // Using the cast to char * to do a byte offset.
+    mBlock *newBlock = (mBlock *) ((char *) block + (sizeof(mBlock) + size));
+    newBlock->size = block->size - reqSize;
+    newBlock->free = false;
+    newBlock->next = block->next;
+
+    block->size = size;
+    block->next = newBlock;
 }
 
 void printMemoryPool(void)

@@ -8,10 +8,8 @@ struct testStruct {
 
 int main(void)
 {
-
-    printf("size of testStruct: %lu\n", sizeof(struct testStruct));
-    struct testStruct *t = nMalloc(sizeof(struct testStruct));
-    printMemoryPool();
+    printf("Size of header: %lu", sizeof(mBlock));
+    struct testStruct *t = nMalloc(sizeof(struct testStruct) * 10);
     nFree(t);
 
     int *nInt = nMalloc(sizeof(int));
