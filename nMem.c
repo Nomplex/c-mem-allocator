@@ -82,8 +82,12 @@ void splitBlock(mBlock *block, size_t size)
     // Using the cast to char * to do a byte offset.
     mBlock *newBlock = (mBlock *) ((char *) block + (sizeof(mBlock) + size));
     newBlock->size = block->size - reqSize;
-    newBlock->free = false;
+    newBlock->free = true;
     newBlock->next = block->next;
+
+    if (newBlock->next == NULL) {
+        mPoolTail = newBlock;
+    }
 
     block->size = size;
     block->next = newBlock;
