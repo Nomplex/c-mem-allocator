@@ -55,7 +55,7 @@ void nFree(void *ptr)
 void *findFreeBlock(size_t size)
 {
     for (mBlock *cur = mPoolHead; cur != NULL; cur = cur->next)
-        if (cur->free && size <= (cur->size - sizeof(mBlock)))
+        if (cur->free && cur->size >= size)
             return cur;
 
     return NULL;
