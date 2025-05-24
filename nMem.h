@@ -16,6 +16,9 @@ void *nMalloc(size_t size);
 void nFree(void *ptr);
 void *findFreeBlock(size_t size);
 bool canSplitBlock(mBlock *block, size_t size);
+size_t freeInARow(mBlock *start);
+void checkForJoinable(void);
+void joinBlock(mBlock *block);
 void splitBlock(mBlock *block, size_t size);
 void printMemoryPool(void);
 

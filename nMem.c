@@ -52,6 +52,7 @@ void nFree(void *ptr)
     mBlock *block = (mBlock *) ptr - 1;
     block->free = true;
     printf("Freeing block with size of: %lu\n", block->size);
+    checkForJoinable();
 }
 
 void *findFreeBlock(size_t size)
@@ -91,6 +92,44 @@ void splitBlock(mBlock *block, size_t size)
 
     block->size = size;
     block->next = newBlock;
+}
+
+size_t freeInARow(mBlock *start)
+{
+    // We could return larger than 3 here even though I only combine the first
+    // available free with the next two. I could change that.
+    size_t free = 0;
+    for (mBlock *cur = start; cur != NULL && cur->free; cur = cur->next)
+        free++;
+    return free;
+}
+
+void checkForJoinable(void)
+{
+    // We look through the linked list start to finish.
+    // If the first block and the next two blocks are free them combine them.
+
+    mBlock *cur = mPoolHead;
+    size_t free;
+
+    while (cur != NULL) {
+        free = freeInARow(cur);
+        if (free >= 3)
+            joinBlock(cur);
+        cur = cur->next;
+    }
+}
+
+void joinBlock(mBlock *block)
+{
+    size_t size2 = sizeof(mBlock) + block->next->size;
+    size_t size3 = sizeof(mBlock) + block->next->next->size;
+
+    block->size = block->size + size2 + size3;
+    if (block->next->next == mPoolTail) {
+        mPoolTail = block;
+    }
+    block->next = block->next->next->next;
 }
 
 void printMemoryPool(void)
